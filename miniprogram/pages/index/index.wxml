@@ -1,0 +1,41 @@
+<view class="container">
+  <view class="header">
+    <view class="device-status {{isOnline ? 'online' : 'offline'}}">
+      <text class="status-dot"></text>
+      <text class="status-text">{{isOnline ? '设备在线' : '设备离线'}}</text>
+    </view>
+    <text class="update-time">更新时间: {{updateTime}}</text>
+  </view>
+
+  <view class="data-grid">
+    <view class="data-card" wx:for="{{sensorData}}" wx:key="name">
+      <view class="card-icon" style="background-color: {{item.color}}20;">
+        <text class="icon-text" style="color: {{item.color}};">{{item.icon}}</text>
+      </view>
+      <view class="card-content">
+        <text class="card-label">{{item.name}}</text>
+        <text class="card-value">{{item.value}}{{item.unit}}</text>
+      </view>
+      <view class="card-trend {{item.trend}}">
+        <text>{{item.trend === 'up' ? '↑' : item.trend === 'down' ? '↓' : '→'}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="control-panel card">
+    <view class="panel-title">控制面板</view>
+    <view class="control-items">
+      <view class="control-item" wx:for="{{controls}}" wx:key="id">
+        <text class="control-name">{{item.name}}</text>
+        <switch checked="{{item.status}}" color="#1890ff" bindchange="onControlChange" data-id="{{item.id}}" />
+      </view>
+    </view>
+  </view>
+
+  <view class="action-bar">
+    <button class="btn-refresh" bindtap="refreshData" loading="{{loading}}">
+      {{loading ? '刷新中...' : '立即刷新'}}
+    </button>
+    <button class="btn-settings" bindtap="showSettings">设置</button>
+  </view>
+</view>

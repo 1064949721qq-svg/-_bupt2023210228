@@ -1,0 +1,67 @@
+<view class="container">
+  <view class="filter-bar card">
+    <view class="filter-item">
+      <text class="filter-label">数据类型</text>
+      <picker mode="selector" range="{{dataTypes}}" value="{{currentTypeIndex}}" bindchange="onTypeChange">
+        <view class="picker-value">{{dataTypes[currentTypeIndex]}} ▼</view>
+      </picker>
+    </view>
+    <view class="filter-item">
+      <text class="filter-label">时间范围</text>
+      <picker mode="selector" range="{{timeRanges}}" range-key="label" value="{{currentTimeIndex}}" bindchange="onTimeRangeChange">
+        <view class="picker-value">{{timeRanges[currentTimeIndex].label}} ▼</view>
+      </picker>
+    </view>
+  </view>
+
+  <view class="chart-area card" wx:if="{{historyData.length > 0}}">
+    <view class="chart-header">
+      <text class="chart-title">{{dataTypes[currentTypeIndex]}}趋势图</text>
+      <text class="chart-stats">平均: {{avgValue}} | 最大: {{maxValue}} | 最小: {{minValue}}</text>
+    </view>
+    
+    <view class="chart-container">
+      <view class="chart-y-axis">
+        <text class="y-label">{{maxValue}}</text>
+        <text class="y-label">{{midValue}}</text>
+        <text class="y-label">{{minValue}}</text>
+      </view>
+      <view class="chart-content">
+        <view class="chart-bars">
+          <view 
+            class="bar-item" 
+            wx:for="{{displayData}}" 
+            wx:key="index"
+            style="height: {{item.height}}%; background: {{item.color}}"
+          >
+            <view class="bar-tooltip" wx:if="{{item.showTooltip}}">
+              {{item.value}}
+            </view>
+          </view>
+        </view>
+        <view class="chart-x-axis">
+          <text class="x-label" wx:for="{{displayData}}" wx:key="index">{{item.timeLabel}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="empty-state card" wx:else>
+    <text class="empty-icon">📊</text>
+    <text class="empty-text">暂无历史数据</text>
+    <button class="btn-load-mock" bindtap="loadMockHistory">加载模拟数据</button>
+  </view>
+
+  <view class="data-list card" wx:if="{{historyData.length > 0}}">
+    <view class="list-header">
+      <text class="list-title">详细记录</text>
+      <text class="list-count">共 {{historyData.length}} 条</text>
+    </view>
+    <scroll-view scroll-y class="list-scroll" style="max-height: 400rpx;">
+      <view class="list-item" wx:for="{{historyData}}" wx:key="time">
+        <text class="item-time">{{item.time}}</text>
+        <text class="item-value">{{item.value}}</text>
+      </view>
+    </scroll-view>
+  </view>
+</view>
